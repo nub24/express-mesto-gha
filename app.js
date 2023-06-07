@@ -11,18 +11,20 @@ mongoose
 
 
 const userRouter = require('./routes/user')
+const cardRouter = require('./routes/card')
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/users', userRouter)
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '647fe35c2481e31105a4b578'
+    _id: '64809b00eac4a9db26d024e8'
   };
-
   next();
 });
+
+app.use('/users', userRouter);
+app.use('/cards', cardRouter);
 
 app.listen(PORT, () => {
   console.log(`Server ok`)

@@ -18,6 +18,24 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUserById = (req, res) => {
   User.findById(req.params._id)
-    .then(users => res.send({ data: users }))
+    .then(user => res.send({ data: user }))
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+}
+
+module.exports.updateProfile = (req, res) => {
+  const { name, about } = req.body;
+  const userId = req.user._id;
+
+  User.findByIdAndUpdate(userId, { name, about }, { new: true })
+    .then(user => res.send({ data: user }))
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+}
+
+module.exports.updateAvatar = (req, res) => {
+  const { avatar } = req.body;
+  const userId = req.user._id;
+
+  User.findByIdAndUpdate(userId, { avatar }, { new: true })
+    .then(user => res.send({ data: user }))
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 }
