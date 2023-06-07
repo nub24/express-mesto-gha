@@ -13,7 +13,7 @@ module.exports.createUser = (req, res) => {
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then(user => res.send({ data: user }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(401).send({ message: 'Произошла ошибка' }));
 }
 
 module.exports.getUserById = (req, res) => {
