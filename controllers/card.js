@@ -53,6 +53,11 @@ module.exports.dislikeCard = (req, res) => {
     { $pull: { likes: userId } },
     { new: true },
   )
-  .then(card => res.send({ data: card }))
-  .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+  .then(card => {
+    if (!card) {
+      res.status(404).send( {message: 'Карточка не найдена'})
+    }
+    return res.send({ data: card })
+  })
+  .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
 }
