@@ -32,7 +32,7 @@ module.exports.updateProfile = (req, res) => {
 
   User.findByIdAndUpdate(userId, { name, about }, { new: true, runValidators: true })
     .then(user => res.send({ data: user }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
 }
 
 module.exports.updateAvatar = (req, res) => {
