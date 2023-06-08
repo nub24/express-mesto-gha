@@ -40,7 +40,7 @@ module.exports.updateAvatar = (req, res) => {
   const { avatar } = req.body;
   const userId = req.user._id;
 
-  user.findByIdAndUpdate(userId, { avatar }, { new: true })
+  user.findByIdAndUpdate(userId, { avatar }, { new: true, runValidators: true })
     .then((userData) => res.send({ data: userData }))
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
