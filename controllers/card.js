@@ -8,7 +8,7 @@ module.exports.createCard = (req, res) => {
     .then(card => {
       res.send({ data: card })
     })
-    .catch(err => res.status(400).send({ message: err }))
+    .catch(err => res.status(400).send({ message: 'Произошла ошибка' }))
 };
 
 module.exports.getCards = (req, res) => {
@@ -35,7 +35,12 @@ module.exports.likeCard = (req, res) => {
     { $addToSet: { likes: userId } },
     { new: true },
   )
-  .then(card => res.send({ data: card }))
+  .then(card => {
+    if (!card) {
+      res.status(404).send( {message: 'Карточка не найдена'})
+    }
+    return res.send({ data: card })
+  })
   .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
 }
 
