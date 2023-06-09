@@ -13,7 +13,7 @@ module.exports.createCard = (req, res) => {
 
 module.exports.getCards = (req, res) => {
   Card.find({})
-    .populate('user')
+    .populate(['owner', 'likes'])
     .then((card) => res.send({ data: card }))
     .catch(() => res.status(401).send({ message: 'Произошла ошибка' }));
 };
