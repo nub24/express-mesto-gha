@@ -1,13 +1,23 @@
 const user = require('../models/user');
+const {
+  CREATED_CODE,
+} = require('../utils/constants');
 
 module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
   user.create({ name, about, avatar })
-    .then((userData) => {
-      res.send({ data: userData });
+    .then((userData) => { res
+      .status(CREATED_CODE)
+      .send({ data: userData });
     })
-    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Переданы некорректные данные при регистрации' });
+      } else {
+        res.status(500).send({ message: 'Произошла ошиька' });
+      }
+    });
 };
 
 module.exports.getUsers = (req, res) => {
