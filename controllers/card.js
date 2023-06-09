@@ -25,6 +25,7 @@ module.exports.deleteCard = (req, res) => {
     .then((card) => {
       if (!card) {
         res.status(404).send({ message: 'Карточка не найдена' });
+        return;
       }
       res.send({ data: card });
     })
@@ -43,6 +44,7 @@ module.exports.likeCard = (req, res) => {
     .then((card) => {
       if (!card) {
         res.status(404).send({ message: 'Карточка не найдена' });
+        return;
       }
       res.send({ data: card });
     })
@@ -61,6 +63,7 @@ module.exports.dislikeCard = (req, res) => {
     .then((card) => {
       if (!card) {
         res.status(404).send({ message: 'Карточка не найдена' });
+        return;
       }
       res.send({ data: card });
     })
