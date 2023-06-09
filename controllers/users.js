@@ -1,6 +1,8 @@
 const user = require('../models/user');
 const {
   CREATED_CODE,
+  ERROR_CODE,
+  ERROR_INTERNAL_SERVER,
 } = require('../utils/constants');
 
 module.exports.createUser = (req, res) => {
@@ -14,9 +16,9 @@ module.exports.createUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Переданы некорректные данные при регистрации' });
+        res.status(ERROR_CODE).send({ message: 'Переданы некорректные данные при регистрации' });
       } else {
-        res.status(500).send({ message: 'Произошла ошиька' });
+        res.status(ERROR_INTERNAL_SERVER).send({ message: 'Произошла ошибка' });
       }
     });
 };
