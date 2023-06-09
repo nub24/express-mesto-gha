@@ -7,9 +7,10 @@ module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
   user.create({ name, about, avatar })
-    .then((userData) => { res
-      .status(CREATED_CODE)
-      .send({ data: userData });
+    .then((userData) => {
+      res
+        .status(CREATED_CODE)
+        .send({ data: userData });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
