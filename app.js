@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-// const { ERROR_NOT_FOUND } = require('./utils/constants');
+const { ERROR_NOT_FOUND } = require('./utils/constants');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -11,9 +11,9 @@ mongoose
   .then(() => console.log('DB ok'))
   .catch((err) => console.log(`DB error: ${err}`));
 
-// const userRouter = require('./routes/user');
-// const cardRouter = require('./routes/card');
-const router = require('./routes/index');
+const userRouter = require('./routes/user');
+const cardRouter = require('./routes/card');
+// const router = require('./routes/index');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -25,12 +25,12 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use('/users', userRouter);
-// app.use('/cards', cardRouter);
-// app.use((req, res) => {
-// res.status(ERROR_NOT_FOUND).send({ message: 'Страница не найдена' });
-// });
-app.use('/', router);
+app.use('/users', userRouter);
+app.use('/cards', cardRouter);
+app.use((req, res) => {
+  res.status(ERROR_NOT_FOUND).send({ message: 'Страница не найдена' });
+});
+// app.use('/', router);
 
 app.listen(PORT, () => {
   console.log('Server ok');
