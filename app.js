@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const router = require('./routes/index');
 
 // const { ERROR_NOT_FOUND } = require('./utils/constants');
 
@@ -14,6 +13,7 @@ mongoose
 
 // const userRouter = require('./routes/user');
 // const cardRouter = require('./routes/card');
+const router = require('./routes/index');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
