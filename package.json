@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/nub24/express-mesto-gha.git"
   },
-  "author": "Alexey Fedorov",
+  "author": "Alex Fedorov",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/nub24/express-mesto-gha/issues"
