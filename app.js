@@ -25,11 +25,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use('/users', userRouter);
-// app.use('/cards', cardRouter);
-// app.use((req, res) => {
-//   res.status(ERROR_NOT_FOUND).send({ message: 'Страница не найдена' });
-// });
 app.use('/', router);
 
 app.listen(PORT, () => {
