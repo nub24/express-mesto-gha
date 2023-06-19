@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = require('./routes/index');
+const { createUser, login } = require('./controllers/users');
+const auth = require('./middlewares/auth');
 
 // const { ERROR_NOT_FOUND } = require('./utils/constants');
 
@@ -18,13 +20,17 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '64809b00eac4a9db26d024e8',
-  };
-  next();
-});
+// app.use((req, res, next) => {
+//   req.user = {
+//     _id: '649077c1acaf24977d754410',
+//   };
+//   next();
+// });
 
+app.post('/signin', login);
+app.post('/signup', createUser);
+
+app.use(auth);
 app.use('/', router);
 
 app.listen(PORT, () => {
