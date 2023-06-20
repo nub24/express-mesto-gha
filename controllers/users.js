@@ -55,7 +55,7 @@ module.exports.getUserById = (req, res, next) => {
       }
       return res
         .status(OK_CODE)
-        .send(userData);
+        .send({ data: userData });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
