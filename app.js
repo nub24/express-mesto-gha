@@ -4,7 +4,7 @@ const { errors } = require('celebrate');
 const router = require('./routes/index');
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
-const { validationCreateUser } = require('./middlewares/validation');
+const { validationCreateUser, validationAuth } = require('./middlewares/validation');
 
 const { ERROR_INTERNAL_SERVER } = require('./utils/constants');
 
@@ -19,7 +19,7 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post('/signin', login);
+app.post('/signin', validationAuth, login);
 app.post('/signup', validationCreateUser, createUser);
 
 app.use(auth);
