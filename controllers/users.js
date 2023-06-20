@@ -53,7 +53,7 @@ module.exports.getUserById = (req, res, next) => {
       if (!userData) {
         throw new NotFoundError('Пользователь не найден!');
       }
-      res
+      return res
         .status(OK_CODE)
         .send({ data: userData });
     })
