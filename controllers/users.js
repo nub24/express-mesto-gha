@@ -50,12 +50,12 @@ module.exports.getUserById = (req, res, next) => {
   const { id } = req.params;
   user.findById(id)
     .then((userData) => {
-      if (!userData) {
-        throw new NotFoundError('Пользователь не найден!');
+      if (userData) {
+        return res
+          .status(OK_CODE)
+          .send({ data: userData });
       }
-      return res
-        .status(OK_CODE)
-        .send({ data: userData });
+      throw new NotFoundError('Пользователь не найден!');
     })
     .catch((err) => {
       if (err.name === 'CastError') {
