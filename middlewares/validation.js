@@ -38,10 +38,18 @@ const validationUpdateAvatar = celebrate({
   }),
 });
 
+const validationCreateCard = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30).required(),
+    link: Joi.string().required().regex(REGEXP_URL),
+  }),
+});
+
 module.exports = {
   validationCreateUser,
   validationAuth,
   validationGetUserById,
   validationUpdateUser,
   validationUpdateAvatar,
+  validationCreateCard,
 };
