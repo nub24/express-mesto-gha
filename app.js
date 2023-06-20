@@ -1,8 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { errors } = require('celebrate');
 const router = require('./routes/index');
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
+const { validationCreateUser } = require('./middlewares/validation');
 
 const { ERROR_INTERNAL_SERVER } = require('./utils/constants');
 
@@ -18,11 +20,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signup', validationCreateUser, createUser);
 
 app.use(auth);
 app.use('/', router);
 
+app.use(errors());
 app.use((err, _, res, next) => {
   const statusCode = err.statusCode || 500;
 
