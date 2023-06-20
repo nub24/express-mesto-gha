@@ -17,4 +17,14 @@ const validationAuth = celebrate({
   }),
 });
 
-module.exports = { validationCreateUser, validationAuth };
+const validationGetUserById = celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().required().regex(/^[0-9a-fA-F]{24}$/),
+  }),
+});
+
+module.exports = {
+  validationCreateUser,
+  validationAuth,
+  validationGetUserById,
+};

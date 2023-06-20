@@ -1,4 +1,5 @@
 const userRouter = require('express').Router();
+const { validationGetUserById } = require('../middlewares/validation');
 
 const {
   // createUser,
@@ -11,7 +12,7 @@ const {
 
 userRouter.get('/', getUsers);
 userRouter.get('/me', getUserInfo);
-userRouter.get('/:_id', getUserById);
+userRouter.get('/:_id', validationGetUserById, getUserById);
 userRouter.patch('/me', updateProfile);
 userRouter.patch('/me/avatar', updateAvatar);
 
