@@ -5,7 +5,6 @@ const NotFoundError = require('../errors/notFounrError');
 const CastError = require('../errors/castError');
 const ValidationError = require('../errors/validationError');
 const ConflictError = require('../errors/conflictError');
-const UnauthorizedError = require('../errors/unauthorizedError');
 
 const { OK_CODE, CREATED_CODE } = require('../utils/constants');
 
@@ -110,12 +109,10 @@ module.exports.login = (req, res, next) => {
     .then((userData) => {
       if (userData) {
         const token = jwt.sign({ _id: userData._id }, 'very-secret-key', { expiresIn: '7d' });
-        return res.send({ token });
+        res.send({ token });
       }
-
-      throw new UnauthorizedError('Неправильные почта или пароль');
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 module.exports.getUserInfo = (req, res, next) => {
