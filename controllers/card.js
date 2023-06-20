@@ -24,7 +24,7 @@ module.exports.createCard = (req, res, next) => {
     });
 };
 
-module.exports.getCards = (req, res, next) => {
+module.exports.getCards = (_, res, next) => {
   Card.find({})
     .populate(['owner', 'likes'])
     .then((card) => {
@@ -53,7 +53,7 @@ module.exports.deleteCard = (req, res, next) => {
     });
 };
 
-module.exports.likeCard = (req, res) => {
+module.exports.likeCard = (req, res, next) => {
   const cardId = req.params._id;
   const userId = req.user._id;
 
@@ -64,21 +64,20 @@ module.exports.likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(ERROR_NOT_FOUND).send({ message: 'Карточка не найдена' });
-        return;
+        throw new NotFoundError('Карточка не найдена!');
       }
       res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(ERROR_CODE).send({ message: 'Некорректный Id' });
-        return;
+        next(new CastError('Передан некорректный id'));
+      } else {
+        next(err);
       }
-      res.status(ERROR_INTERNAL_SERVER).send({ message: 'Произошла ошибка' });
     });
 };
 
-module.exports.dislikeCard = (req, res) => {
+module.exports.dislikeCard = (req, res, next) => {
   const cardId = req.params._id;
   const userId = req.user._id;
 
@@ -89,16 +88,15 @@ module.exports.dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(ERROR_NOT_FOUND).send({ message: 'Карточка не найдена' });
-        return;
+        throw new NotFoundError('Карточка не найдена!');
       }
       res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(ERROR_CODE).send({ message: 'Некорректный Id' });
-        return;
+        next(new CastError('Передан некорректный id'));
+      } else {
+        next(err);
       }
-      res.status(ERROR_INTERNAL_SERVER).send({ message: 'Произошла ошибка' });
     });
 };
