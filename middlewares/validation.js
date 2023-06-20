@@ -19,7 +19,7 @@ const validationAuth = celebrate({
 
 const validationGetUserById = celebrate({
   params: Joi.object().keys({
-    userId: Joi.string().required().regex(/^[0-9a-fA-F]{24}$/),
+    id: Joi.string().length(24).hex().required(),
   }),
 });
 
