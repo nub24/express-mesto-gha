@@ -5,6 +5,7 @@ const NotFoundError = require('../errors/notFounrError');
 const CastError = require('../errors/castError');
 const ValidationError = require('../errors/validationError');
 const ConflictError = require('../errors/conflictError');
+const UnauthorizedError = require('../errors/unauthorizedError');
 
 const { OK_CODE, CREATED_CODE } = require('../utils/constants');
 
@@ -36,7 +37,7 @@ module.exports.createUser = (req, res, next) => {
     });
 };
 
-module.exports.getUsers = (req, res, next) => {
+module.exports.getUsers = (_, res, next) => {
   user.find({})
     .then((userData) => {
       res
@@ -102,24 +103,23 @@ module.exports.updateAvatar = (req, res, next) => {
     });
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   return user.findUserByCredentials(email, password)
     .then((userData) => {
-      const token = jwt.sign({ _id: userData._id }, 'very-secret-key', { expiresIn: '7d' });
-      res.send({ token });
+      if (userData) {
+        const token = jwt.sign({ _id: userData._id }, 'very-secret-key', { expiresIn: '7d' });
+        return res.send({ token });
+      }
+
+      throw new UnauthorizedError('Неправильные почта или пароль');
     })
-    .catch((err) => {
-      res
-        .status(401)
-        .send({ message: err.message });
-    });
+    .catch((err) => next(err));
 };
 
 module.exports.getUserInfo = (req, res, next) => {
   const userId = req.user._id;
-  console.log(userId);
   user.findById(userId)
     .then((userData) => {
       if (!userData) {

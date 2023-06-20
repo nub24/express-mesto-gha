@@ -1,12 +1,11 @@
 const Card = require('../models/card');
-const {
-  CREATED_CODE,
-  ERROR_CODE,
-  ERROR_INTERNAL_SERVER,
-  ERROR_NOT_FOUND,
-} = require('../utils/constants');
+const NotFoundError = require('../errors/notFounrError');
+const ValidationError = require('../errors/validationError');
+const CastError = require('../errors/castError');
 
-module.exports.createCard = (req, res) => {
+const { OK_CODE, CREATED_CODE } = require('../utils/constants');
+
+module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
 
@@ -18,37 +17,39 @@ module.exports.createCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(ERROR_CODE).send({ message: 'Переданы некорректные данные карточки' });
+        next(new ValidationError('Переданы некорректные данные карточки'));
       } else {
-        res.status(ERROR_INTERNAL_SERVER).send({ message: 'Произошла ошибка' });
+        next(err);
       }
     });
 };
 
-module.exports.getCards = (req, res) => {
+module.exports.getCards = (req, res, next) => {
   Card.find({})
     .populate(['owner', 'likes'])
-    .then((card) => res.send({ data: card }))
-    .catch(() => res.status(ERROR_INTERNAL_SERVER).send({ message: 'Произошла ошибка' }));
+    .then((card) => {
+      res
+        .status(OK_CODE)
+        .send({ data: card });
+    })
+    .catch(next);
 };
 
-module.exports.deleteCard = (req, res) => {
+module.exports.deleteCard = (req, res, next) => {
   const cardId = req.params._id;
 
   Card.findByIdAndRemove(cardId)
     .then((card) => {
       if (!card) {
-        res.status(ERROR_NOT_FOUND).send({ message: 'Карточка не найдена' });
-        return;
+        throw new NotFoundError('Карточка не найдена!');
       }
       res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(ERROR_CODE).send({ message: 'Некорректный Id' });
-        return;
+        return next(new CastError('Некорректный ID!'));
       }
-      res.status(ERROR_INTERNAL_SERVER).send({ message: 'Произошла ошибка' });
+      return next(err);
     });
 };
 
