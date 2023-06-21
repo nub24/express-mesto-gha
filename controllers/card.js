@@ -100,7 +100,7 @@ module.exports.dislikeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError('Карточка не найдена!');
       }
-      res
+      return res
         .statusC(OK_CODE)
         .send({ data: card });
     })
