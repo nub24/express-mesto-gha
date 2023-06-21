@@ -27,9 +27,10 @@ app.use('/', router);
 
 app.use(errors());
 app.use((err, _, res, next) => {
+  console.log(err);
   const statusCode = err.statusCode || 500;
 
-  const message = statusCode === ERROR_INTERNAL_SERVER ? 'Ошибка на сервере' : err.message;
+  const message = statusCode === ERROR_INTERNAL_SERVER ? 'Ошибка на сервере!' : err.message;
   res.status(statusCode).send({ message });
   next();
 });
