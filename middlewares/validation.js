@@ -1,7 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 
 const REGEXP_URL = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
-const REGEXP_ID = /^[0-9a-fA-F]{24}$/;
 
 const validationCreateUser = celebrate({
   body: Joi.object().keys({
@@ -48,7 +47,7 @@ const validationCreateCard = celebrate({
 
 const validationCardId = celebrate({
   params: Joi.object().keys({
-    _id: Joi.string().regex(REGEXP_ID).required(),
+    _id: Joi.string().length(24).hex().required(),
   }),
 });
 
