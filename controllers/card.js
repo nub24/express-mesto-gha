@@ -41,14 +41,14 @@ module.exports.deleteCard = (req, res, next) => {
   const userId = req.user._id;
 
   Card.findById(cardId)
-    .populate(['owner', 'likes'])
     .then((card) => {
       if (!card) {
         throw new NotFoundError('Карточка не найдена!');
       } else {
         if (card.owner.toString === userId) {
-          Card.findByIdAndRemove(cardId).then(() => res.status(OK_CODE).send({ data: card }));
-          return;
+          Card.findByIdAndRemove(cardId).then(() => {
+            res.status(OK_CODE).send({ data: card });
+          });
         }
         throw new ForbiddenError('Нельзя удалить чужую карточку');
       }
