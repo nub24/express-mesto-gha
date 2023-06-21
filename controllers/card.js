@@ -101,7 +101,7 @@ module.exports.dislikeCard = (req, res, next) => {
         throw new NotFoundError('Карточка не найдена!');
       }
       return res
-        .statusC(OK_CODE)
+        .status(OK_CODE)
         .send({ data: card });
     })
     .catch((err) => {
