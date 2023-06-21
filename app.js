@@ -2,8 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const router = require('./routes/index');
-
-const { ERROR_INTERNAL_SERVER } = require('./utils/constants');
+const errorHandler = require('./middlewares/errorHandler');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -19,13 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/', router);
 
 app.use(errors());
-app.use((err, _, res, next) => {
-  const statusCode = err.statusCode || 500;
-
-  const message = statusCode === ERROR_INTERNAL_SERVER ? 'Ошибка на сервере!' : err.message;
-  res.status(statusCode).send({ message });
-  next();
-});
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log('Server ok');
